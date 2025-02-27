@@ -1,11 +1,50 @@
 import random
 import os
 
-
+def globalize():
+ global equipped
+ global armor
+ global inventory
+ global gold
+ global spells
+ global maxhealth
+ global health
+ global level
+ global exp
+ global explvlup
+ global playerdamage
+ global area
+ global defense
+ global playerdefensemod
+ global playerdamagemod
+ global weapons
+ global golddrops
+ global itemdrops
+ global expdrops
+ global defense
+ global attackingenemy
+ global enemy1
+ global enemy2
+ global enemy3
+ global enemy1hp
+ global enemy2hp
+ global enemy3hp
+ global enemy1max
+ global enemy2max
+ global enemy3max
+ global enemymaxhp
+ global encounter
+ global enemy1defensemod
+ global enemy2defensemod
+ global enemy3defensemod
+ global enemy1attackmod
+ global enemy2attackmod
+ global enemy3attackmod
+ global enemyattackmod
+ global enemydefensemod
 
 
 # print(random.randint(1,100))
-	
 
 
 equipped = "STICK"
@@ -26,20 +65,8 @@ playerdamagemod = 0
 weapons = "STICK, WORN DAGGER"
 
 
-
-
 def loot():
- global gold
- global exp
- global explvlup
- global level
- global health
- global playerdamage
- global maxhealth
- global golddrops
- global itemdrops
- global expdrops
- global defense
+ globalize()
  golddrops = 0
  expdrops = 0
  itemdrops = []
@@ -75,13 +102,15 @@ def loot():
      explvlup = int(explvlup)
 
 
-
-
 def slimecombat():
-  global defense
-  global playerdefensemod
-  global health
+  globalize()
   enemyattack = random.randint(2,3) - defense - playerdefensemod
+  if attackingenemy == enemy1:
+	  enemyattack += enemy1attackmod
+  if attackingenemy == enemy2:
+	  enemyattack += enemy2attackmod
+  if attackingenemy == enemy3:
+	  enemyattack += enemy3attackmod
   if enemyattack > 0:
       print(f"{attackingenemy} corrodes {name} for {enemyattack} damage!\n")
       health -= enemyattack
@@ -91,13 +120,15 @@ def slimecombat():
   print(f"Defense has decreased by 1!\n")
 
 
-
-
 def goblincombat():
-  global defense
-  global playerdefensemod
-  global health
+  globalize()
   enemyattack = random.randint(3, 4) - defense - playerdefensemod
+  if attackingenemy == enemy1:
+	  enemyattack += enemy1attackmod
+  if attackingenemy == enemy2:
+	  enemyattack += enemy2attackmod
+  if attackingenemy == enemy3:
+	  enemyattack += enemy3attackmod
   if enemyattack > 0:
       print(f"{attackingenemy} strikes {name} for {enemyattack} damage!\n")
       health -= enemyattack
@@ -105,13 +136,8 @@ def goblincombat():
       print(f"{attackingenemy} strikes, but it bounces off!")
 
 
-
-
 def slimeloot():
-  global inventory
-  global itemdrops
-  global golddrops
-  global expdrops
+  globalize()
   golddrops += random.randint(1, 4)
   expdrops += 4
   chance = random.randint(1, 20)
@@ -120,13 +146,8 @@ def slimeloot():
       inventory.append("CORROSIVE ROCK")
 
 
-
-
 def goblinloot():
- global inventory
- global itemdrops
- global golddrops
- global expdrops
+ globalize()
  golddrops += random.randint(2, 3)
  expdrops += 5
  chance = random.randint(1, 15)
@@ -139,18 +160,8 @@ def goblinloot():
      inventory.append("WORN DAGGER")
 
 
-
-
 def enemyturn():
- global attackingenemy
- global health
- global maxhealth
- global enemy1
- global enemy2
- global enemy3
- global enemy1hp
- global enemy2hp
- global enemy3hp
+ globalize()
  if enemy1hp <= 0 and enemy2hp <= 0 and enemy3hp <= 0:
      print(f"{name} is victorious!\n\nResting...\n")
      health = maxhealth
@@ -183,53 +194,47 @@ def enemyturn():
      menu()
 
 
-
-
 def setstatsenemy():
- global enemymaxhp
+ globalize()
  if enemy == "":
      enemymaxhp = 0
  if enemy == "GOBLIN":
      enemymaxhp = 7
+     enemyattackmod = 0
+     enemydefensemod = 0
  if enemy == "SLIME":
      enemymaxhp = 5
-     
-
+     enemyattackmod = 0
+     enemydefensemod = 0
 
 
 def fightstart():
- global playerdamagemod
- global playerdefensemod
- global enemy1hp
- global enemy2hp
- global enemy3hp
- global enemy1max
- global enemy2max
- global enemy3max
+ globalize()
  itemstats()
  enemy = enemy1
  setstatsenemy()
  enemy1max = enemymaxhp
  enemy1hp = enemymaxhp
+ enemy1attackmod = enemyattackmod
+ enemy1defensemod = enemydefensemod
  enemy = enemy2
  setstatsenemy()
  enemy2max = enemymaxhp
  enemy2hp = enemymaxhp
+ enemy2attackmod = enemyattackmod
+ enemy2defensemod = enemydefensemod
  enemy = enemy3
  setstatsenemy()
  enemy3max = enemymaxhp
  enemy3hp = enemymaxhp
+ enemy3attackmod = enemyattackmod
+ enemy3defensemod = enemydefensemod
  print("Encountered enemies!\n")
  playerturn()
 
 
-
-
 def itemstats():
-  global playerdamagemod
-  global playerdefensemod
-  global equipped
-  global armor
+  globalize()
   playerdefensemod = 0
   playerdamagemod = 0
   if equipped == "STICK":
@@ -240,20 +245,8 @@ def itemstats():
       playerdefensemod = 1
 
 
-
-
 def playerturn():
- global enemy1
- global enemy2
- global enemy3
- global enemy1hp
- global enemy2hp
- global enemy3hp
- global enemy1max
- global enemy2max
- global enemy3max
- global playerdamagemod
- global playerdamage
+ globalize()
  print("Enemies:\n")
  if enemy1hp > 0:
      print(f"{enemy1}, {enemy1hp}/{enemy1max}HP\n")
@@ -279,22 +272,25 @@ def playerturn():
      answer = input(f"Options: [1] return, [Enemy name] target an enemy (not case sensitive) ").upper()
      if answer == enemy1 and enemy1hp > 0:
          clear()
-         print(f"\n{name} strikes {enemy1} for {playerdamage + playerdamagemod} damage!\n")
-         enemy1hp -= playerdamage + playerdamagemod
+	 if playerdamage + playerdamagemod - enemy1defensemod > 0:
+             print(f"\n{name} strikes {enemy1} for {playerdamage + playerdamagemod - enemy1defensemod} damage!\n")
+             enemy1hp -= playerdamage + playerdamagemod - enemy1defensemod
+	 else:
+	     print(f"\n{name} strikes {enemy1}, but its defenses are too thick!")	 
          if enemy1hp <= 0:
              print(f"{enemy1} is defeated!\n")
          enemyturn()
      if answer == enemy2 and enemy2hp > 0:
          clear()
-         print(f"\n{name} strikes {enemy2} for {playerdamage + playerdamagemod} damage!\n")
-         enemy2hp -= playerdamage + playerdamagemod
+         print(f"\n{name} strikes {enemy2} for {playerdamage + playerdamagemod - enemy2defensemod} damage!\n")
+         enemy2hp -= playerdamage + playerdamagemod - enemy2defensemod
          if enemy2hp <= 0:
              print(f"{enemy2} is defeated!\n")
          enemyturn()
      if answer == enemy3 and enemy3hp > 0:
          clear()
-         print(f"\n{name} strikes {enemy3} for {playerdamage + playerdamagemod} damage!\n")
-         enemy3hp -= playerdamage + playerdamagemod
+         print(f"\n{name} strikes {enemy3} for {playerdamage + playerdamagemod - enemy3defensemod} damage!\n")
+         enemy3hp -= playerdamage + playerdamagemod - enemy3defensemod
          if enemy3hp <= 0:
              print(f"{enemy3} is defeated!\n")
          enemyturn()
@@ -312,13 +308,8 @@ def playerturn():
      playerturn()
 
 
-
-
 def explore():
- global enemy1
- global enemy2
- global enemy3
- global encounter
+ globalize()
  enemy1 = ""
  enemy2 = ""
  enemy3 = ""
@@ -349,9 +340,8 @@ def explore():
          menu()
 
 
-
-
 def checkspells():
+ globalize()
  if spells == []:
      clear()
      print("You have no spells!")
@@ -360,8 +350,6 @@ def checkspells():
      print("\nSpells include:\n")
      print(spells)
      answer = input("\nOptions are: [1] close spell list, [2] inspect spell\n")
-
-
 
 
 def status():
@@ -384,8 +372,6 @@ def status():
      status()
 
 
-
-
 def menu():
  answer = input("\nOptions are: [1] open inventory, [2] check spells, [3] check status, [4] explore ").upper()
  if answer == "1":
@@ -406,11 +392,8 @@ def menu():
      menu()
 
 
-
-
 def openinv():
- global equipped
- global armor
+ globalize()
  print(f"\nYour inventory contains:\n {inventory}\n")
  print(f"You currently have [{equipped}] equipped as a weapon\n")
  print(f"You currently have [{armor}] equipped as armor\n")
@@ -463,18 +446,12 @@ def openinv():
      openinv()
 
 
-
-
 def clear():
  os.system('cls' if os.name == 'nt' else 'clear')
 
 
-
-
 clear()
 print("Welcome to Yuanpy.World!\n")
-
-
 
 
 while True:
@@ -490,11 +467,7 @@ while True:
      print('\nReturning...\n')
 
 
-
-
 print(f"{name} wakes up in a forest with nothing but a stick.\n")
 print("If you don't believe me, you should check your inventory and status before setting out")
 menu()
-
-
 
