@@ -185,7 +185,7 @@ def enemyturn():
 
 
 
-def setmaxhpenemy():
+def setstatsenemy():
  global enemymaxhp
  if enemy == "":
      enemymaxhp = 0
@@ -193,7 +193,7 @@ def setmaxhpenemy():
      enemymaxhp = 7
  if enemy == "SLIME":
      enemymaxhp = 5
-
+     
 
 
 
@@ -206,18 +206,17 @@ def fightstart():
  global enemy1max
  global enemy2max
  global enemy3max
- global enemy
  itemstats()
  enemy = enemy1
- setmaxhpenemy()
+ setstatsenemy()
  enemy1max = enemymaxhp
  enemy1hp = enemymaxhp
  enemy = enemy2
- setmaxhpenemy()
+ setstatsenemy()
  enemy2max = enemymaxhp
  enemy2hp = enemymaxhp
  enemy = enemy3
- setmaxhpenemy()
+ setstatsenemy()
  enemy3max = enemymaxhp
  enemy3hp = enemymaxhp
  print("Encountered enemies!\n")
